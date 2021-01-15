@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+    <head>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script>
+
+            $(function(){
+                $("#create").click(function(){
+                    
+                    $.post("http://localhost:8080/job",$("form").serialize())
+                    
+                })
+            })
+        </script>
+    </head>
+    <body>
+
+        <form>
+
+            <input name="name" value="test8">
+        </form>
+
+        <button id="create">create</button>
+    </body>
+</html>
