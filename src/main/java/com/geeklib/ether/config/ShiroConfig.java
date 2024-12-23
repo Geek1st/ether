@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.geeklib.ether.filter.JwtFilter;
 import com.geeklib.ether.filter.UnauthorizedFilter;
-import com.geeklib.ether.realm.JwtRealm;
 import com.geeklib.ether.realm.UsernamePasswordRealm;
 
 @Configuration
@@ -61,11 +60,6 @@ public class ShiroConfig {
     @Bean
     public UsernamePasswordRealm usernamePasswordRealm(){
         return new UsernamePasswordRealm();
-    }
-
-    @Bean
-    public JwtRealm jwtRealm(){
-        return new JwtRealm();
     }
 
     @Bean
