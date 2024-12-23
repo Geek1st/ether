@@ -1,0 +1,10 @@
+FROM bitnami/git:2.38.1-debian-11-r5 as git
+RUN git clone -b ${branch} ${repo} repo
+
+FROM hub.centit.com/library/maven:3.6.3-oracle-jdk-8u251 as build
+COPY --from=git /repo /repo
+WORKDIR /repo
+RUN ${command} -f ${path}/pom.xml
+
+FROM hub.centit.com/library/tomcat:8.5.57-oracle-server-jre-8u251 as run
+COPY --from=build /repo/${path}/target/*.war /usr/local/tomcat/webapps/${context}.war

@@ -1,0 +1,3 @@
+FROM tomcat:8.5.57
+#ADD ${filename} /usr/local/tomcat/webapps/${context}
+EXPOSE 8080

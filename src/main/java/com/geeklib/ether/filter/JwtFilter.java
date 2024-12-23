@@ -1,0 +1,51 @@
+package com.geeklib.ether.filter;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.shiro.web.filter.AccessControlFilter;
+
+import com.geeklib.ether.utils.JwtUtils;
+
+public class JwtFilter extends AccessControlFilter {
+
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
+            throws Exception {
+
+        /*
+         * 只验证token是否合法，不验证是否是当前用户
+         * 任何持有token的客户端都认为是合法的，可以用token代理调用
+         * 面向客户端完全无状态
+         * 合法性包括：token格式是否正确，token是否过期，token是否被篡改
+         */
+
+        // 如果是登录（/login）或注销（/logout）路径，允许访问
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String path = httpRequest.getRequestURI();
+        if ("/login".equals(path) || "/logout".equals(path)) {
+            return true;
+        }
+        String token = ((HttpServletRequest) request).getHeader("Authorization");
+
+        if (null == token || !token.startsWith("Bearer ")) {
+            throw new IllegalStateException("token无效");
+        }
+
+        if (null == JwtUtils.validateToken(token.substring(7)).getSubject()) { // 去掉Bearer前缀
+            throw new IllegalStateException("token无效");
+        }
+        return true;
+    }
+
+    @Override
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return false;
+    }
+
+}
