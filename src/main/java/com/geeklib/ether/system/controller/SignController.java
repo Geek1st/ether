@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.geeklib.ether.system.entity.User;
 import com.geeklib.ether.system.service.JwtBlacklistService;
 import com.geeklib.ether.system.service.UserService;
+import com.geeklib.ether.utils.JwtUtils;
 
 @RestController
 public class SignController {
@@ -33,7 +34,7 @@ public class SignController {
 
         try {
             subject.login(token);
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(JwtUtils.generateToken(user.getUsername()));
         } catch (AuthenticationException e) {
             
             return ResponseEntity.internalServerError().body("用户名或密码错");         

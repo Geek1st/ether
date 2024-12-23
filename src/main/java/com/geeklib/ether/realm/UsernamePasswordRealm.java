@@ -17,12 +17,18 @@ import org.apache.shiro.subject.PrincipalCollection;
 import com.geeklib.ether.system.entity.User;
 import com.geeklib.ether.system.service.UserService;
 
-import groovyjarjarantlr4.v4.parse.ANTLRParser.throwsSpec_return;
-
 public class UsernamePasswordRealm extends AuthorizingRealm{
 
 	@Resource
 	UserService userService;
+
+	@Override
+	public boolean supports(AuthenticationToken token) {
+		if(token instanceof UsernamePasswordToken){
+			return true;
+		}
+		return super.supports(token);
+	}
     
     @Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {

@@ -15,11 +15,11 @@ public class JwtUtils {
         return Jwts.builder().setSubject(username).setExpiration(new java.util.Date(System.currentTimeMillis() + JWT_EXPIRATION)).signWith(JWT_KEY).compact();
     }
 
-    public static Claims validateToken(String token){
+    public static Claims parseToken(String token){
         return Jwts.parserBuilder().setSigningKey(JWT_KEY).build().parseClaimsJws(token).getBody();
     }
 
     public static String getUsername(String token){
-        return validateToken(token).getSubject();
+        return parseToken(token).getSubject();
     }
 }

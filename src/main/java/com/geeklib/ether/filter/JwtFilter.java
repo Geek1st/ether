@@ -12,6 +12,7 @@ import com.geeklib.ether.utils.JwtUtils;
 
 public class JwtFilter extends AccessControlFilter {
 
+
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
             throws Exception {
@@ -22,21 +23,14 @@ public class JwtFilter extends AccessControlFilter {
          * 面向客户端完全无状态
          * 合法性包括：token格式是否正确，token是否过期，token是否被篡改
          */
-
-        // 如果是登录（/login）或注销（/logout）路径，允许访问
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String path = httpRequest.getRequestURI();
-        if ("/login".equals(path) || "/logout".equals(path)) {
-            return true;
-        }
         String token = ((HttpServletRequest) request).getHeader("Authorization");
 
         if (null == token || !token.startsWith("Bearer ")) {
-            throw new IllegalStateException("token无效");
+            return false;
         }
 
-        if (null == JwtUtils.validateToken(token.substring(7)).getSubject()) { // 去掉Bearer前缀
-            throw new IllegalStateException("token无效");
+        if (null == JwtUtils.parseToken(token.substring(7)).getSubject()) { // 去掉Bearer前缀
+            return false;
         }
         return true;
     }

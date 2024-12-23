@@ -9,11 +9,12 @@ import javax.servlet.Filter;
 import org.apache.shiro.mgt.SessionsSecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.h2.engine.Session;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.geeklib.ether.filter.JwtFilter;
-import com.geeklib.ether.filter.UnauthorizedFilter;
+import com.geeklib.ether.filter.SessionFilter;
 import com.geeklib.ether.realm.UsernamePasswordRealm;
 
 @Configuration
@@ -27,13 +28,11 @@ public class ShiroConfig {
             
             put("/login","anon");
             put("/logout","anon");
-            //put("/**", "authc");
-            //put("/**", "unauthorizedFilter");
-            put("/api/**", "jwtFilter, unauthorizedFilter");
+            put("/api/**", "sessionFilter, jwtFilter");
         }};
 
         Map<String, Filter> filters = new HashMap<String, Filter>(){{
-            put("unauthorizedFilter", unauthorizedFilter());
+            put("sessionFilter", sessionFilter());
             put("jwtFilter", jwtFilter());
         }};
    
@@ -41,9 +40,6 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         shiroFilterFactoryBean.setSecurityManager(securityManager());
         shiroFilterFactoryBean.setFilters(filters);
-        // shiroFilterFactoryBean.setLoginUrl("/login");
-        // shiroFilterFactoryBean.setUnauthorizedUrl("/login");
-        // shiroFilterFactoryBean.setSuccessUrl("/hello");
         return shiroFilterFactoryBean;
     }
 
@@ -63,8 +59,8 @@ public class ShiroConfig {
     }
 
     @Bean
-    public UnauthorizedFilter unauthorizedFilter(){
-        return new UnauthorizedFilter();
+    public SessionFilter sessionFilter(){
+        return new SessionFilter();
     }
 
     @Bean
