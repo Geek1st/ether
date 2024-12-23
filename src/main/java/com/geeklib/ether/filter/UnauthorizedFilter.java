@@ -5,18 +5,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
+import org.apache.tools.ant.taskdefs.condition.Http;
 
 import com.geeklib.ether.utils.JwtUtils;
 
-public class JwtFilter extends AccessControlFilter {
+public class UnauthorizedFilter extends AccessControlFilter {
+ 
+    private boolean validateSession(){
+        return SecurityUtils.getSubject().isAuthenticated();
+    }
 
-
-    @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue)
-            throws Exception {
-
+    private boolean validateToken(HttpServletRequest request){
         /*
          * 只验证token是否合法，不验证是否是当前用户
          * 任何持有token的客户端都认为是合法的，可以用token代理调用
@@ -35,11 +36,25 @@ public class JwtFilter extends AccessControlFilter {
         return true;
     }
 
+    // private boolean validateApiKey(){
+    //     return true;
+    // }
+
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+
+        if(validateSession() || validateToken((HttpServletRequest) request)){
+            return true;
+        }
         return false;
     }
 
+    @Override
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        return false;
+    }
 }
