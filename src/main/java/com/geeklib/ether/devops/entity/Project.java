@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -22,6 +23,7 @@ public class Project{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Length(max = 50)
     @Column
     private String name;
 
@@ -32,4 +34,8 @@ public class Project{
     @LastModifiedDate
     @Column
     private Timestamp gmtModified;
+
+    @Length(max = 200)
+    @Column
+    private String description;
 }

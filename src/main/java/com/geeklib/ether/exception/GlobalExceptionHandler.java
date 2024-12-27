@@ -3,6 +3,7 @@ package com.geeklib.ether.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,10 +14,8 @@ public class GlobalExceptionHandler {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<String> processMethodArgumentNotVaildException(MethodArgumentNotValidException e) {
-
-        e.printStackTrace();
-        return ResponseEntity.internalServerError().body("");
+    public ResponseEntity<BindingResult> processMethodArgumentNotVaildException(MethodArgumentNotValidException e) {
+        return ResponseEntity.internalServerError().body(e.getBindingResult());
     }
 
     @ExceptionHandler

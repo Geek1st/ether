@@ -46,6 +46,7 @@ public class BuildServiceImpl implements BuildService{
 
         Path path = Paths.get(FileUtils.getDataDir(), projectCode, applicationCode, "Dockerfile");
         File dockerfile = FileUtils.toFile(buildInfo.getDockerfile(), path);
+        
         DockerUtils.build(buildInfo, dockerfile);
         DockerUtils.push(buildInfo.getTag());
         return null;
