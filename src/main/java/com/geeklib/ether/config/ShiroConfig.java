@@ -13,8 +13,7 @@ import org.h2.engine.Session;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.geeklib.ether.filter.JwtFilter;
-import com.geeklib.ether.filter.SessionFilter;
+import com.geeklib.ether.filter.UnauthorizedFilter;
 import com.geeklib.ether.realm.UsernamePasswordRealm;
 
 @Configuration
@@ -28,12 +27,11 @@ public class ShiroConfig {
             
             put("/login","anon");
             put("/logout","anon");
-            put("/api/**", "sessionFilter, jwtFilter");
+            put("/api/**", "unauthorizedFilter");
         }};
 
         Map<String, Filter> filters = new HashMap<String, Filter>(){{
-            put("sessionFilter", sessionFilter());
-            put("jwtFilter", jwtFilter());
+            put("unauthorizedFilter", unauthorizedFilter());
         }};
    
 
@@ -59,12 +57,8 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SessionFilter sessionFilter(){
-        return new SessionFilter();
+    public UnauthorizedFilter unauthorizedFilter(){
+        return new UnauthorizedFilter();
     }
 
-    @Bean
-    public JwtFilter jwtFilter(){
-        return new JwtFilter();
-    }
 }
