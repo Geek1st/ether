@@ -13,6 +13,8 @@ public interface BuildService {
 
     public BuildImageResultCallback build(BuildInfo buildInfo, File file, String projectCode, String applicationCode);
 
+    public File exportImage(String imageName, String tag);
+
     // public void build(Build build);
 
     // public List<Build> listBuild();

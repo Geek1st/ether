@@ -1,9 +1,5 @@
 package com.geeklib.ether.devops.services.impl;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.HashSet;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -13,7 +9,6 @@ import org.springframework.stereotype.Service;
 // import com.geeklib.ether.devops.entity.Build;
 import com.geeklib.ether.devops.services.DockerService;
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.BuildImageResultCallback;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.transport.DockerHttpClient;

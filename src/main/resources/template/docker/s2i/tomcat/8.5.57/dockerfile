@@ -6,5 +6,10 @@ COPY --from=git /repo /repo
 WORKDIR /repo
 RUN ${command} -f ${path}/pom.xml
 
+FROM alpine
+COPY --from=build /repo/${path}/target/*.war /data
+WORKDIR /data
+RUN curl -F "file=${path}.war" http://localhost:8080/api/devops/s2i/archive
+
 FROM hub.centit.com/library/tomcat:8.5.57-oracle-server-jre-8u251 as run
 COPY --from=build /repo/${path}/target/*.war /usr/local/tomcat/webapps/${context}.war

@@ -1,9 +1,5 @@
 package com.geeklib.ether.devops.services;
 
-import java.nio.file.Path;
-
-import com.github.dockerjava.api.command.BuildImageResultCallback;
-
 public interface DockerService {
     
     // public BuildImageResultCallback build(Path dockerfile, Build build);

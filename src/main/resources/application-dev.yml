@@ -26,7 +26,7 @@ file:
     data-dir: c:/environment/nginx-1.19.0/html/ether
 
 docker:
-    host: 192.168.137.28
+    host: 192.168.241.128
     port: 2379
     registry: 
         api: hub.centit.com

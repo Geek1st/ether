@@ -55,6 +55,28 @@ public class HarborUtils {
         harborContext.path(url).buildAndExpand(projectName);
 
         HttpUtils.getJSON(URI.create(url));
+    }
+
+    public void getArtifact(String projectName, String repositoryName, String tag) {
+        String url = "/projects/{projectName}/repositories/{repositoryName}/artifacts/{tag}";
+    }
+
+    public void listArtifacts(String projectName, String repositoryName) {
+        String url = "/projects/{projectName}/repositories/{repositoryName}/artifacts";
+    }
+
+    public void createProject(String projectName){
 
     }
+
+    public void deleteProject(String projectName){
+
+    }
+
+    public void listProject(){
+
+    }
+
+    public void getProject(String projectName){}
+
 }

@@ -3,15 +3,10 @@ package com.geeklib.ether.devops.services.impl;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.geeklib.ether.config.Properties.Docker;
 import com.geeklib.ether.devops.entity.BuildInfo;
-import com.geeklib.ether.devops.entity.BuildInfoS2i;
-// import com.geeklib.ether.devops.entity.Build;
-import com.geeklib.ether.devops.entity.BuildInfoS2iJava;
 import com.geeklib.ether.devops.services.BuildService;
 import com.geeklib.ether.utils.DockerUtils;
 import com.geeklib.ether.utils.FileUtils;
@@ -56,6 +51,10 @@ public class BuildServiceImpl implements BuildService{
     public BuildImageResultCallback build(BuildInfo buildInfo, File file, String projectCode, String applicationCode) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'build'");
+    }
+
+    public File exportImage(String imageName, String tag) {
+        return DockerUtils.export(imageName, tag);
     }
     
 }
