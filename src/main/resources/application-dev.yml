@@ -5,16 +5,17 @@ spring:
             max-file-size: 200MB    # 最大支持文件大小
             max-request-size: 200MB # 最大支持请求大小
     datasource:
-        username: sa
-        password: 
-        url: jdbc:h2:file:~/onedrive/ether/ether;DB_CLOSE_ON_EXIT=TRUE;AUTO_SERVER=TRUE  #FILE_LOCK=NO
-    h2:
-        console:
-            enabled: true
-            settings:
-                web-allow-others: true
+        username: root
+        password: Mysql1dF0r
+        url: jdbc:mysql://sh-cdb-6z8s2pbe.sql.tencentcdb.com:21016/ether
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        hikari:
+            minimum-idle: 5
+            maximum-pool-size: 15
+            connection-timeout: 30000
+            idle-timeout: 60000
     jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
+        database-platform: org.hibernate.dialect.MySQL57Dialect
 logging:
     # level:
     #     root: info

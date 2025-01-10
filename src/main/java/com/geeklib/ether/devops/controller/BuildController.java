@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/api/devops/build")
+@RequestMapping("/devops/build")
 public class BuildController {
     
     Logger logger = LoggerFactory.getLogger(this.getClass());

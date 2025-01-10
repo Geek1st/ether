@@ -24,9 +24,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date createTime;
+    private Date gmtCreate;
 
-    private Date updateTime;
+    private Date gmtModified;
 
     private String username;
 

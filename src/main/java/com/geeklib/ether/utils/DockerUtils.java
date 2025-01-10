@@ -95,6 +95,10 @@ public class DockerUtils {
         dockerClient.pushImageCmd(imageName).start();
     }
 
+    public static void pull(String imageName) {
+        dockerClient.pullImageCmd(imageName).start();
+    }
+
     /**
      * 导出镜像文件tar
      * 

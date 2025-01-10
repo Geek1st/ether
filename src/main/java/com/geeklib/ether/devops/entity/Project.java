@@ -13,6 +13,8 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Entity
@@ -29,6 +31,7 @@ public class Project{
 
     @CreatedDate
     @Column
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp gmtCreate;
 
     @LastModifiedDate

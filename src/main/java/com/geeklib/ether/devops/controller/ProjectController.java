@@ -18,7 +18,7 @@ import com.geeklib.ether.devops.services.RegistryService;
  * 该控制器与gitlab、harbor、kubernetes交互
  */
 @RestController
-@RequestMapping("/api/project")
+@RequestMapping("/project")
 public class ProjectController {
 
     @Resource
