@@ -20,8 +20,8 @@
 		"preload": false,
 		"max": "30",
 		"index": {
-			"id": "10",
-			"href": "view/console/console1.html",
+			"id": "devops-build",
+			"href": "view/build/index.html",
 			"title": "首页"
 		}
 	},

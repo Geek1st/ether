@@ -34,8 +34,8 @@ tab:
   max: "30"
   ## 首页
   index: 
-    id: "10" ## 标识 ID , 建议与菜单项中的 ID 一致
-    href: "view/analysis/index.html" ## 页面地址
+    id: "devops-build" ## 标识 ID , 建议与菜单项中的 ID 一致
+    href: "view/build/index.html" ## 页面地址
     title: "首页" ## 标题
 ## 主题配置
 theme: 
