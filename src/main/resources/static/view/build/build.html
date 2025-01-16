@@ -2,153 +2,51 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<title>工作台</title>
-	<meta name="renderer" content="webkit">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<style>
-		.layui-input,
-		.layui-unselect,
-		.layui-select-title {
-			height: 30px;
-		}
-	</style>
-	<script type="text/html" id="tableOpeate">
-		<a class="layui-icon layui-icon-play" id="run"></a>
-		<i class="layui-icon layui-icon-loading-1" id="loading">&#xe63e;</i>
-		<a class="layui-icon layui-icon-pause" id="pause"></a>
-		<a class="layui-icon layui-icon-list" id="log"></a>
-		<a class="layui-icon layui-icon-set-fill" id="setting"></a>
-		<a class="layui-icon layui-icon-release" id="deploy"></a>
-		<a class="layui-icon " id="healthz"></a>
-	</script>
-	<script type="text/html" id="toolbar">
-			<div class="layui-inline ">
-				<input type="text" id="search"  placeholder="搜索" autocomplete="off" class="layui-input" style="height:30px;width:160px">
-			</div>
-			<div class="layui-inline " style="height:30px;width:100px">
-				<select id="orderState">
-					<option value="0">所有状态</option>
-					<option value="1">已支付</option>
-					<option value="2">未支付</option>
-					<option value="3">已结算</option>
-				</select>
-			</div>
-			<button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="search" style="padding:0px 3px 0px 5px">
-				<i class="layui-icon">&#xe615;</i>
-			</button>
-		</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Monaco Editor 示例</title>
+    <!-- <link rel="stylesheet" href="/component/monaco/css/editor.main.css" /> -->
 </head>
 
 <body>
-	<div class="pear-container">
-		<div class="layui-row layui-col-space10">
-			<div class="layui-col-md12">
-				<div class="layui-row layui-col-space10">
-					<div class="layui-col-md12">
-						<div class="layui-card">
-							<div class="layui-card-header">
-								以太运维平台
-							</div>
-							<div class="layui-card-body">
-								springboot+layui+mysql+redis+docker+jenkins+gitlab+harbor
-							</div>
-						</div>
-					</div>
+    <form class="layui-form">
+        <div class=" layui-form-item">
+            <label class="layui-form-label">镜像名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="imageName" required lay-verify="required" placeholder="请输入镜像名称"
+                    autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Dockerfile</label>
+            <div class="layui-input-block">
+                <textarea class="layui-input" name="dockerfile" style="height: 300px;"></textarea>
+            </div>
+        </div>
+    </form>
+    <!-- <script src="/component/monaco/js/loader.js"></script> -->
+    <script>
+        // layui.use(['layer', 'form'], function () {
+        //     var $ = layui.jquery,
+        //         layer = layui.layer,
+        //         form = layui.form;
 
-					<div class="layui-col-md12">
-						<div class="layui-card">
-							<div class="layui-card-header">
-								全部子工程
-							</div>
-							<div class="layui-card-body" style="padding-top: 15px; padding-bottom: 15px;">
-								<table class="layui-hide" id="ID-table-demo-data" lay-filter="table"></table>
-							</div>
-						</div>
-						
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-		layui.use(['layer', 'element', 'table'], function () {
-			var $ = layui.jquery,
-				layer = layui.layer,
-				element = layui.element,
-				echarts = layui.echarts,
-				table = layui.table,
-				carousel = layui.carousel;
-
-			var inst = table.render({
-				elem: '#ID-table-demo-data',
-				toolbar: "#toolbar",
-				url: '/application',
-				cols: [
-					[{
-						field: 'id',
-						hide: true
-					},
-					{
-						field: 'buildNumber',
-						title: '构建次数',
-						minWidth: 60
-					},
-					{
-						field: 'name',
-						title: '工程名称',
-						minWidth: 160
-					},
-					{
-						field: 'code',
-						title: '工程代号',
-						minwidth: 160
-					},
-					{
-						field: 'gmtCreate',
-						title: '创建时间',
-						width: 160
-					},
-					{
-						field: '',
-						title: '上一次执行时间',
-						width: 160
-					},
-					{
-						field: 'healthz',
-						title: '健康度',
-						width: 120
-					},
-					{
-
-					},
-					{
-						field: 'experience',
-						title: '操作',
-						minWidth: 80,
-						templet: '#tableOpeate'
-					}
-					]
-				],
-				page: true,
-				parseData: function (res) {
-					return {
-						"code": 0,
-						"msg": null,
-						"data": res
-					};
-				}
-			});
-
-			table.on('row(table)', function (data) {
-		
-			});
-
-
-		});
-	</script>
+        //     // 初始化Monaco Editor
+        //     require.config({ paths: { 'vs': '/component/monaco' } });
+        //     require(['vs/editor/editor.main'], function () {
+        //         var editor = monaco.editor.create(document.getElementById('editor-container'), {
+        //             value: [
+        //                 'FROM ubuntu:latest',
+        //                 'RUN apt-get update && apt-get install -y \\',
+        //                 '    curl \\',
+        //                 '    vim',
+        //                 'CMD ["bash"]'
+        //             ].join('\n'),
+        //             language: 'dockerfile'
+        //         });
+        //     });
+        // });
+    </script>
 </body>
 
 </html>
