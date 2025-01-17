@@ -115,10 +115,11 @@
 					layer.open({
 						type: 1,
 						title: '创建工程',
-						area: ['800px', '600px'],
+						maxHeight: 480,
 						content: '<div id="pear-content" style="padding:16px"></div>',
 						success: function (layero, index) {
 							$('#pear-content').load('/view/build/application_add.html');
+							$(layero).area = ['800px','auto'];
 						}
 					});
 				}

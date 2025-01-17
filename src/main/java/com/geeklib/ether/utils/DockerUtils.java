@@ -1,7 +1,6 @@
 package com.geeklib.ether.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,8 +12,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-
-import org.apache.commons.io.FileUtils;
 
 import com.geeklib.ether.devops.entity.BuildInfo;
 import com.github.dockerjava.api.DockerClient;
@@ -29,24 +26,16 @@ import com.github.dockerjava.transport.DockerHttpClient;
 
 public class DockerUtils {
 
-    static DockerHttpClient dockerHttpClient;
+    @Resource
+    DockerHttpClient dockerHttpClient;
 
-    static DockerClientConfig dockerClientConfig;
+    @Resource
+    DockerClientConfig dockerClientConfig;
 
     static DockerClient dockerClient;
 
-    @Resource
-    public void setDockerHttpClient(DockerHttpClient dockerHttpClient) {
-        DockerUtils.dockerHttpClient = dockerHttpClient;
-    }
-
-    @Resource
-    public void setDockerClientConfig(DockerClientConfig dockerClientConfig) {
-        DockerUtils.dockerClientConfig = dockerClientConfig;
-    }
-
     @PostConstruct
-    public void dockerUtils() {
+    public void initDockerClient() {
         DockerUtils.dockerClient = DockerClientImpl.getInstance(dockerClientConfig, dockerHttpClient);
     }
 

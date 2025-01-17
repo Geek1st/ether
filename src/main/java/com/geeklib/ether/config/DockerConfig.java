@@ -19,7 +19,7 @@ public class DockerConfig {
     @Bean
     public DockerClientConfig dockerClientConfig() {
         DockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withDockerHost("tcp://192.168.137.13:2375")
+                .withDockerHost("tcp://192.168.241.128:2375")
                 .withDockerTlsVerify(false)
                 .withDockerCertPath("")
                 .withRegistryUrl("http://hub.centit.com")

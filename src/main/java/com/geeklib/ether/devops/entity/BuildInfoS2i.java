@@ -11,7 +11,6 @@ public class BuildInfoS2i extends BuildInfo{
     // private SCM scm;
     @NotNull
     private String dockerfile;
-    @NotBlank
     private String image;
     @NotEmpty
     private String tag;

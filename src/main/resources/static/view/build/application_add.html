@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Demo</title>
+    <title>新增工程</title>
 </head>
 
 <body>
@@ -12,14 +12,14 @@
         <form class="layui-form" action="">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">应用名称</label>
+                    <label class="layui-form-label">工程名称</label>
                     <div class="layui-input-inline">
                         <input type="text" name="name" lay-verify="required" placeholder="" autocomplete="off"
                             class="layui-input" />
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">应用编号</label>
+                    <label class="layui-form-label">工程编号</label>
                     <div class="layui-input-inline layui-input-wrap">
                         <input type="text" name="code" lay-verify="required" autocomplete="off" lay-affix="clear"
                             class="layui-input" />
@@ -27,19 +27,16 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">应用描述</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="name" lay-verify="required" placeholder="" autocomplete="off"
-                            class="layui-input" />
-                    </div>
+                <label class="layui-form-label">关联SCM</label>
+                <div class="layui-input-block">
+                    <input type="text" name="code" lay-verify="required" autocomplete="off" lay-affix="clear"
+                        class="layui-input" />
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">仓库地址</label>
-                    <div class="layui-input-inline layui-input-wrap">
-                        <input type="text" name="code" lay-verify="required" autocomplete="off" lay-affix="clear"
-                            class="layui-input" />
-                    </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">工程描述</label>
+                <div class="layui-input-block">
+                    <textarea rows="3" name="description" lay-verify="required" class="layui-textarea"></textarea>
                 </div>
             </div>
         </form>
