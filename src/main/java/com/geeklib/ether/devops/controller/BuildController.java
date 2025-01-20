@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.geeklib.ether.devops.entity.BuildInfoS2i;
 import com.geeklib.ether.devops.services.BuildService;
 import com.geeklib.ether.devops.services.DockerService;
 import com.geeklib.ether.utils.FileUtils;
+import com.github.dockerjava.api.command.BuildImageResultCallback;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -81,7 +83,8 @@ public class BuildController {
     @PostMapping("/s2i/{projectCode}/{applicationCode}")
     public ResponseEntity<Object> createImage(@Valid BuildInfoS2i buildinfo, @PathVariable String projectCode, @PathVariable String applicationCode){
         
-        return ResponseEntity.ok(buildService.build(buildinfo, projectCode, applicationCode));
+        BuildImageResultCallback buildImageResultCallback = buildService.build(buildinfo, projectCode, applicationCode);
+        return ResponseEntity.ok(null);
     }
 
     @PostMapping("/b2i/{projectCode}/{applicationCode}")

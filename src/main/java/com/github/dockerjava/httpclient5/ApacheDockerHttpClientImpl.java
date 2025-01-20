@@ -120,7 +120,7 @@ class ApacheDockerHttpClientImpl implements DockerHttpClient {
             defaultRequest.setResponseTimeout(responseTimeout.toNanos(), TimeUnit.NANOSECONDS);
         }
 
-        defaultRequest.setProxy(new HttpHost("127.0.0.1", 8888));
+        // defaultRequest.setProxy(new HttpHost("127.0.0.1", 8888));
         httpClient = HttpClients.custom()
             .setRequestExecutor(new HijackingHttpRequestExecutor(null))
             .setConnectionManager(connectionManager)

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+ 
 <head>
 	<meta charset="utf-8">
 	<title>工作台</title>
@@ -8,13 +8,19 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<script type="text/html" id="tableOpeate" lay-filter="tableOpeate">
-		<a class="layui-icon layui-icon-play" id="run" lay-event="run"></a>
+		<a class="layui-icon layui-icon-play"  id="run" lay-event="run" style="color: #16baaa"></a>
 		<a class="layui-icon layui-icon-pause" id="pause" lay-event="pause"></a>
-		<a class="layui-icon layui-icon-list" id="log" lay-event="log"></a>
+		<a class="layui-icon layui-icon-list" id="log" lay-event="log" style="color: #31bdec;"></a>
 		<a class="layui-icon layui-icon-set-fill" id="setting" lay-event="setting"></a>
 		<a class="layui-icon layui-icon-release" id="deploy" lay-event="deploy"></a>
+		<a class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop" id="loading" lay-event="loding"></a>
 		<a class="layui-icon " id="healthz"></a>
 	</script>
+	<style type="text/css">
+		.layui-icon {
+			font-size: 20px;
+		}	
+	</style>
 	<script type="text/html" id="toolbar">
 		<div class="layui-inline ">
 			<input type="text" id="search"  placeholder="搜索" autocomplete="off" class="layui-input" style="height:30px;width:160px">
@@ -131,7 +137,17 @@
 				} else if (obj.event === 'pause') {
 					layer.msg('暂停: ' + data.id);
 				} else if (obj.event === 'log') {
-					layer.msg('日志: ' + data.id);
+					layer.open({
+						type: 1,
+						title: '日志',
+						area: ['800px', '600px'],
+						content: '<div id="pear-content" style="padding:16px"></div>',
+						success: function (layero, index) {
+							EventSource('build/s2i/log/' + data.id, function (data) {
+								$('#pear-content').append(data + '<br>');
+							});
+						}
+					});
 				} else if (obj.event === 'setting') {
 
 					layer.open({

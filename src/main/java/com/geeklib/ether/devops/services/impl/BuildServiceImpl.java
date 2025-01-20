@@ -5,12 +5,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.geeklib.ether.devops.entity.BuildInfo;
 import com.geeklib.ether.devops.services.BuildService;
 import com.geeklib.ether.utils.DockerUtils;
 import com.geeklib.ether.utils.FileUtils;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
+import com.github.dockerjava.api.model.BuildResponseItem;
 
 @Service
 public class BuildServiceImpl implements BuildService{
@@ -42,15 +44,18 @@ public class BuildServiceImpl implements BuildService{
         Path path = Paths.get(FileUtils.getDataDir(), projectCode, applicationCode, "Dockerfile");
         File dockerfile = FileUtils.toFile(buildInfo.getDockerfile(), path);
         
-        DockerUtils.build(buildInfo, dockerfile);
-        DockerUtils.push(buildInfo.getTag());
-        return null;
+        // DockerUtils.push(buildInfo.getTag());
+        return DockerUtils.build(buildInfo, dockerfile);
     }
 
     @Override
     public BuildImageResultCallback build(BuildInfo buildInfo, File file, String projectCode, String applicationCode) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'build'");
+    }
+
+    public void streamBuildLogs(SseEmitter emitter) {
+        
     }
 
     public File exportImage(String imageName, String tag) {
