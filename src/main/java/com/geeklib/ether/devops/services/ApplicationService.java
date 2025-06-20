@@ -7,4 +7,8 @@ import com.geeklib.ether.devops.entity.Application;
 public interface ApplicationService {
     
     List<Application> listApplications();
+
+    Application getApplication(long id);
+
+    Application createApplication(Application application);
 }

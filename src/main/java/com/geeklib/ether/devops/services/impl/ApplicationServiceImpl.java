@@ -1,5 +1,8 @@
 package com.geeklib.ether.devops.services.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,18 +10,39 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.geeklib.ether.devops.entity.Application;
-import com.geeklib.ether.devops.mapper.ApplicationMapper;
 import com.geeklib.ether.devops.services.ApplicationService;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
-    
+
     @Resource
-    ApplicationMapper applicationMapper;
+    HazelcastInstance hazelcastInstance;
+
 
     @Override
     public List<Application> listApplications() {
-        return applicationMapper.listObject();
+        IMap<Long, Application> iMap = hazelcastInstance.getMap(Application.class.getSimpleName());
+        Collection<Application> collection = iMap.values();
+        List<Application> applications = new ArrayList<Application>(collection);
+        return applications;
     }
+
+    @Override
+    public Application getApplication(long id) {
+        IMap<Long, Application> imap = hazelcastInstance.getMap(Application.class.getSimpleName());
+        Application application = imap.get(id);
+        return application;
+    }
+
+    @Override
+    public Application createApplication(Application application) {
+        hazelcastInstance.getMap(Application.class.getSimpleName())
+                .put(application.getId(), application);
+        return application;
+    }
+
+    
     
 }

@@ -10,7 +10,7 @@
 	<script type="text/html" id="tableOpeate" lay-filter="tableOpeate">
 		<a class="layui-icon layui-icon-play"  id="run" lay-event="run" style="color: #16baaa"></a>
 		<a class="layui-icon layui-icon-pause" id="pause" lay-event="pause"></a>
-		<a class="layui-icon layui-icon-list" id="log" lay-event="log" style="color: #31bdec;"></a>
+		<a class="layui-icon layui-icon-file" id="log" lay-event="log" style="color: #31bdec;"></a>
 		<a class="layui-icon layui-icon-set-fill" id="setting" lay-event="setting"></a>
 		<a class="layui-icon layui-icon-release" id="deploy" lay-event="deploy"></a>
 		<a class="layui-icon layui-icon-loading-1 layui-anim layui-anim-rotate layui-anim-loop" id="loading" lay-event="loding"></a>
@@ -141,11 +141,15 @@
 						type: 1,
 						title: '日志',
 						area: ['800px', '600px'],
-						content: '<div id="pear-content" style="padding:16px"></div>',
+						content: '<div id="container-log" style="padding:16px"></div>',
 						success: function (layero, index) {
-							EventSource('build/s2i/log/' + data.id, function (data) {
-								$('#pear-content').append(data + '<br>');
-							});
+							const eventSource = new EventSource('/devops/build/s2i/log/' + data.id);
+							eventSource.onmessage = function(event) {
+								$('#container-log').append(event.data + '<br>');
+							};
+							eventSource.onerror = function() {
+								eventSource.close();
+							};
 						}
 					});
 				} else if (obj.event === 'setting') {
@@ -154,10 +158,22 @@
 						type: 1,
 						title: '构建工程',
 						area: ['800px', '600px'],
-						content: '<div id="pear-content" style="padding:16px"></div>',
+						btn: ['确认', '取消'],
+						btn1: function (index, layero) {
+							$.ajax({
+								url: '/devops/build/s2i/ether/ether',
+								data: layero.find('form').serialize(),
+								type: 'POST'
+							});
+						},
+						btn2: function (index, layero) {
+							layer.close(index);
+						},
+						content: '<div id="container-buildInfo" style="padding:16px"></div>',
 						success: function (layero, index) {
-							$('#pear-content').load('/view/build/build.html');
+							$('#container-buildInfo').load('/view/build/build.html');
 						}
+						
 					});
 				} else if (obj.event === 'deploy') {
 					layer.msg('部署: ' + data.id);

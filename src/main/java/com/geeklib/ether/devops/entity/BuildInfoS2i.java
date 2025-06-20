@@ -1,19 +1,22 @@
 package com.geeklib.ether.devops.entity;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import java.io.File;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Set;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class BuildInfoS2i extends BuildInfo{
-    // private SCM scm;
-    @NotNull
-    private String dockerfile;
-    private String image;
-    @NotEmpty
-    private String tag;
-    // private Registry registry;
-    // private Project project;
+    File dockerfile;
+    String dockerfileContent;
+    InputStream tarStream;
+    Set<String> tags;
+    Map<String, String> labels;
+    boolean noCache;
+    Map<String, String> args;
+    String platform;
 }

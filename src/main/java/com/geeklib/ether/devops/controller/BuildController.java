@@ -2,7 +2,6 @@ package com.geeklib.ether.devops.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -21,11 +20,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.geeklib.ether.devops.entity.BuildInfoS2i;
 import com.geeklib.ether.devops.services.BuildService;
-import com.geeklib.ether.devops.services.DockerService;
 import com.geeklib.ether.utils.FileUtils;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -36,9 +32,6 @@ public class BuildController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
-    DockerService dockerService;
-
-    @Resource
     BuildService buildService;
     
     @GetMapping("/s2i/template")
@@ -47,18 +40,20 @@ public class BuildController {
         return ResponseEntity.ok(template);
     }
 
+    
     @PostMapping("/s2i/archive")
-    public ResponseEntity<String> archive(MultipartFile file){
-        try {
-            file.transferTo(Paths.get("/"));
-        } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    public ResponseEntity<String> archive(MultipartFile file, String projectName, String applicationName, Long buildNumber) throws IOException, IllegalStateException {
+
+        buildService.archive(file, projectName, applicationName, buildNumber);
         return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("/s2i/{projectName}/{applicationName}/{buildNumber}/log")
+    public SseEmitter streamBuildLogs(@PathVariable String projectName, 
+                                      @PathVariable String applicationName, 
+                                      @PathVariable Long buildNumber) {
+        SseEmitter sseEmitter = buildService.streamBuildLogs(projectName, applicationName, buildNumber);
+        return sseEmitter;
     }
 
     /**
@@ -81,10 +76,11 @@ public class BuildController {
     }
 
     @PostMapping("/s2i/{projectCode}/{applicationCode}")
-    public ResponseEntity<Object> createImage(@Valid BuildInfoS2i buildinfo, @PathVariable String projectCode, @PathVariable String applicationCode){
-        
-        BuildImageResultCallback buildImageResultCallback = buildService.build(buildinfo, projectCode, applicationCode);
-        return ResponseEntity.ok(null);
+    public ResponseEntity<BuildImageResultCallback> createImage(@Valid BuildInfoS2i buildinfoS2i, @PathVariable String projectName, @PathVariable String applicationName) throws IOException{
+        buildinfoS2i.setProjectName(projectName);
+        buildinfoS2i.setApplicationName(applicationName);
+        BuildImageResultCallback buildImageResultCallback = buildService.build(buildinfoS2i, projectName, applicationName);
+        return ResponseEntity.ok(buildImageResultCallback);
     }
 
     @PostMapping("/b2i/{projectCode}/{applicationCode}")

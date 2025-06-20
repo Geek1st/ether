@@ -5,79 +5,67 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Monaco Editor 示例</title>
-    <!-- <link rel="stylesheet" href="/component/monaco/css/editor.main.css" /> -->
+    <script src="/component/monaco/js/loader.js"></script>
 </head>
 
 <body>
     <form class="layui-form">
-        <div class=" layui-form-item">
-            <label class="layui-form-label">镜像名称</label>
-            <div class="layui-input-block">
-                <input type="text" name="tag" lay-verify="required" placeholder="请输入镜像名称" autocomplete="off"
-                    class="layui-input" value="hub.centit.com/ether:latest" />
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">Dockerfile</label>
-            <div class="layui-input-block">
-                <textarea class="layui-input" name="dockerfile" style="height: 300px;">
-FROM bitnami/git:2.38.1-debian-11-r5 as git
-RUN git clone -b master https://github.com/Geek1st/ether.git repo
-
-FROM maven:3.6.3-openjdk-8 as build
-COPY --from=git /repo /repo
-WORKDIR /repo
-RUN mvn packge 
-
-FROM alpine as archive
-COPY --from=build /repo/target/ether.jar /data
-WORKDIR /data
-RUN curl -F "file=ether.jar" http://192.168.137.12:8080/devops/s2i/archive
-
-FROM jdk:8u265 as run
-COPY --from=build /repo/target/ether.jar /opt/ether.jar
-                </textarea>
-            </div>
-        </div>
-        <button class="layui-btn" lay-submit lay-filter="submit">提交</button>
+        <div id="editor-container" name="dockerfile" style="height: 300px;"></div>
+        <textarea name="dockerfile" style="display: none;"></textarea>
     </form>
     <script>
         layui.use(['layer', 'form'], function () {
             var $ = layui.jquery,
                 layer = layui.layer,
                 form = layui.form;
+
+            var editor;
             
-            form.on('submit', function (data) {
-                $.ajax({
-                    url: '/devops/build/s2i/ether/ether',
-                    type: 'POST',
-                    data: data.field,
-                    success: function (res) {
-                        if (res.code === 0) {
-                            layer.msg('构建成功');
-                        } else {
-                            layer.msg('构建失败');
-                        }
-                    }
+
+            require.config({ paths: { 'vs': '/component/monaco' } });
+            require(['vs/editor/editor.main'], function () {
+                editor = monaco.editor.create(document.getElementById('editor-container'), {
+                    language: 'dockerfile'
                 });
 
-                return false;
+                monaco.languages.registerCompletionItemProvider('dockerfile', {
+                    provideCompletionItems: function (model, position) {
+                        var textUntilPosition = model.getValueInRange({
+                            startLineNumber: 1,
+                            startColumn: 1,
+                            endLineNumber: position.lineNumber,
+                            endColumn: position.column
+                        });
+
+                        // 调用 DeepSeek API 获取补全建议
+                        return fetch('https://api.deepseek.com/v1/completions', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer sk-3754cd2240ae4afba64ec51aacd3c959'
+                            },
+                            body: JSON.stringify({
+                                prompt: textUntilPosition,
+                                max_tokens: 50,
+                                model: "deepseek-r1" // 确保包含 model 字段
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                return {
+                                    suggestions: data.choices.map(choice => ({
+                                        label: choice.text.trim(),
+                                        kind: monaco.languages.CompletionItemKind.Text,
+                                        insertText: choice.text.trim()
+                                    }))
+                                };
+                            });
+                    }
+                });
+                
+                
             });
 
-            // 初始化Monaco Editor
-            // require.config({ paths: { 'vs': '/component/monaco' } });
-            // require(['vs/editor/editor.main'], function () {
-            //     var editor = monaco.editor.create(document.getElementById('editor-container'), {
-            //         value: [
-            //             'FROM ubuntu:latest',
-            //             'RUN apt-get update && apt-get install -y \\',
-            //             '    curl \\',
-            //             '    vim',
-            //             'CMD ["bash"]'
-            //         ].join('\n'),
-            //         language: 'dockerfile'
-            //     });
-            // });
         });
     </script>
 </body>

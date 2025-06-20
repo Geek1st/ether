@@ -7,11 +7,11 @@ import com.geeklib.ether.devops.entity.Project;
 public interface RegistryService {
     
 
-    public List<Project> listProject();
+    // public List<Project> listProject();
 
-    public void createProject();
+    // public void createProject();
 
-    public void deleteProject();
+    // public void deleteProject();
 
-    public void viewProject();
+    // public void viewProject();
 }

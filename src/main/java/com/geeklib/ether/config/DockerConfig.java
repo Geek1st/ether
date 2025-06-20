@@ -2,7 +2,7 @@ package com.geeklib.ether.config;
 
 import java.time.Duration;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +14,8 @@ import com.github.dockerjava.transport.DockerHttpClient;
 @Configuration
 public class DockerConfig {
 
-
-    // TODO 写入配置文件
+    @Autowired
+    DockerProperties dockerProperties;
     @Bean
     public DockerClientConfig dockerClientConfig() {
         DockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()

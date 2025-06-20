@@ -1,14 +1,15 @@
 package com.geeklib.ether.system.mapper;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.geeklib.ether.system.entity.User;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
 
-public interface UserMapper extends JpaRepository<User, Long>{
+import com.geeklib.ether.system.entity.User;
 
-    List<User> findByUsername(String username);
+@Component
+public class UserMapper{
 
-    List<User> findByUsernameAndPassword(String username, String password);
+    List<User> findByUsername(String username){return null;};
+
+    List<User> findByUsernameAndPassword(String username, String password){return null;};
 }

@@ -17,7 +17,7 @@ menu:
   ## 多菜单模式
   control: true
   ## 默认选中的菜单项
-  select: "devops-project"
+  select: 0
   ## 是否开启异步菜单，false 时 data 属性设置为静态数据，true 时为后端接口
   async: true
 ## 视图内容配置
@@ -34,8 +34,8 @@ tab:
   max: "30"
   ## 首页
   index: 
-    id: "devops-project" ## 标识 ID , 建议与菜单项中的 ID 一致
-    href: "view/build/project.html" ## 页面地址
+    id: 0 ## 标识 ID , 建议与菜单项中的 ID 一致
+    href: "view/dashboard/dashboard.html" ## 页面地址
     title: "首页" ## 标题
 ## 主题配置
 theme: 

@@ -4,28 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.geeklib.ether.config.FileConfig;
 
 @Component
 public class FileUtils {
 
-    static FileConfig fileConfig;
-
-    @Autowired
-    public void setFileConfig(FileConfig fileConfig) {
-        FileUtils.fileConfig = fileConfig;
-    }
-
-    public static String getDataDir(){
-        return fileConfig.getDataDir();
-    }
 
     public static String getTemplate(String path){
         return FileUtils.class.getClassLoader().getResource(path).getFile();

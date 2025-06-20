@@ -5,8 +5,11 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +37,27 @@ public class ProjectController {
     }
 
     @PostMapping("/")
-    public ResponseEntity createProject(Project project){
+    public ResponseEntity<?> createProject(Project project){
 
         projectService.createProject(project);
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok().body(null);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Project> getProject(@PathVariable long id){
+        return ResponseEntity.ok(projectService.getProject(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProject(@PathVariable long id){
+        projectService.removeProject(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProject(@PathVariable long id, Project project){
+        projectService.updateProject(project);
+
+        return ResponseEntity.ok("");
+    } 
 }
