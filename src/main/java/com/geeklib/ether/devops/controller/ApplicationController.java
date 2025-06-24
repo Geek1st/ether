@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.geeklib.ether.devops.entity.Application;
 import com.geeklib.ether.devops.services.ApplicationService;
+import com.hazelcast.spi.impl.operationservice.impl.responses.Response;
+
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -38,6 +41,11 @@ public class ApplicationController {
 
     @PostMapping("")
     public ResponseEntity<Application> createApplication(@RequestBody Application application) {
+        return ResponseEntity.ok(applicationService.createApplication(application));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Application> updateApplication(@PathVariable long id, @RequestBody Application application) {
         return ResponseEntity.ok(applicationService.createApplication(application));
     }
     

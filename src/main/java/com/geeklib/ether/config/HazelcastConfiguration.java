@@ -1,7 +1,5 @@
 package com.geeklib.ether.config;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -10,6 +8,7 @@ import org.reflections.Reflections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.geeklib.ether.common.JsonMapStore;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
@@ -22,6 +21,9 @@ public class HazelcastConfiguration {
 
     @Resource
     WorkspaceProperties workspaceProperties;
+
+    @Resource
+    ObjectMapper objectMapper;
 
     @Bean
     public HazelcastInstance hazelcastInstance() {
@@ -52,7 +54,7 @@ public class HazelcastConfiguration {
             MapConfig mapConfig = new MapConfig(entityClass.getSimpleName());
             MapStoreConfig mapStoreConfig = new MapStoreConfig();
             mapStoreConfig.setEnabled(true)
-                    .setImplementation(new JsonMapStore<>(entityClass, workspaceProperties))
+                    .setImplementation(new JsonMapStore<>(entityClass, workspaceProperties, objectMapper))
                     .setWriteDelaySeconds(0);
             mapConfig.setMapStoreConfig(mapStoreConfig);
             config.addMapConfig(mapConfig);

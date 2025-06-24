@@ -22,15 +22,16 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
 
     protected Logger logger = LoggerFactory.getLogger(JsonMapStore.class);
 
-    protected final ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper;
 
     WorkspaceProperties workspaceProperties;
 
     private final Class<T> type;
 
-    public JsonMapStore(Class<T> type, WorkspaceProperties workspaceProperties) {
+    public JsonMapStore(Class<T> type, WorkspaceProperties workspaceProperties, ObjectMapper objectMapper) {
         this.type = type;
         this.workspaceProperties = workspaceProperties;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -75,6 +76,10 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
     public T load(Long key) {
 
         File file = this.getStoreFile(key);
+
+        if(!file.exists()) {
+            return null;
+        }
 
         try {
             return objectMapper.readValue(file, getValueClass());

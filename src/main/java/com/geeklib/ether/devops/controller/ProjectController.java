@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,11 +37,11 @@ public class ProjectController {
         return projectService.listProject();
     }
 
-    @PostMapping("/")
-    public ResponseEntity<?> createProject(Project project){
+    @PostMapping("")
+    public ResponseEntity<Project> createProject(@RequestBody Project project){
 
-        projectService.createProject(project);
-        return ResponseEntity.ok().body(null);
+        ;
+        return ResponseEntity.ok().body(projectService.createProject(project));
     }
 
     @GetMapping("/{id}")

@@ -1,28 +1,25 @@
 package com.geeklib.ether.devops.entity;
 
-import java.sql.Timestamp;
+
+import java.io.Serializable;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.geeklib.ether.annotation.Entity;
+import com.geeklib.ether.common.BaseEntity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class Project{
+@Getter
+@Setter
+@Entity
+public class Project extends BaseEntity implements Serializable{
 
-    private Long id;
-
+    private static final long serialVersionUID = 1L;
+    
     @Length(max = 50)
-
     private String name;
-
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp gmtCreate;
-
-
-    private Timestamp gmtModified;
 
     @Length(max = 200)
     private String description;

@@ -47,9 +47,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void createProject(Project project) {
-
-        iMap.put(project.getId(), project);
+    public Project createProject(Project project) {
+        long id = hazelcastInstance.getFlakeIdGenerator(Project.class.getSimpleName()).newId();
+        project.setId(id);
+        return iMap.put(id, project);
     }
 
     @Override

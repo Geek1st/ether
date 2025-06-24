@@ -38,9 +38,41 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public Application createApplication(Application application) {
+        long id = hazelcastInstance.getFlakeIdGenerator(Application.class.getSimpleName()).newId();
+        application.setId(id);
         hazelcastInstance.getMap(Application.class.getSimpleName())
-                .put(application.getId(), application);
+                .put(id, application);
         return application;
+    }
+
+    @Override
+    public boolean updateApplication(long id, Application application) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateApplication'");
+    }
+
+    @Override
+    public boolean patchApplication(long id, Application application) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'patchApplication'");
+    }
+
+    @Override
+    public boolean deleteApplication(long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteApplication'");
+    }
+
+    @Override
+    public boolean deleteApplication(Application application) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteApplication'");
+    }
+
+    @Override
+    public boolean deleteApplications(List<Long> ids) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteApplications'");
     }
 
     

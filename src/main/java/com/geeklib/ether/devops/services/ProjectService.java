@@ -8,7 +8,7 @@ public interface ProjectService extends BaseService{
 
     List<Project> listProject();
 
-    void createProject(Project project);
+    Project createProject(Project project);
 
     Project getProject(long id);
 

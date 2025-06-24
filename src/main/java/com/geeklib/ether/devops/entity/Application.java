@@ -1,29 +1,20 @@
 package com.geeklib.ether.devops.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.geeklib.ether.annotation.Entity;
+import com.geeklib.ether.common.BaseEntity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
-public class Application implements java.io.Serializable {
+public class Application extends BaseEntity implements java.io.Serializable {
     
     private static final long serialVersionUID = 1L;
-
-    private Long id;
-
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date gmtCreate;
-
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-
-    private Date gmtModified;
-
 
     private String name;
 
