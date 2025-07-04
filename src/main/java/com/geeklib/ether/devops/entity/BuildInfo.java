@@ -3,25 +3,16 @@ package com.geeklib.ether.devops.entity;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.geeklib.ether.annotation.Entity;
+import com.geeklib.ether.common.BaseEntity;
 
 import lombok.Getter;
 import lombok.Setter;
 @Getter
 @Setter
-public class BuildInfo{
+@Entity
+public class BuildInfo extends BaseEntity {
 
-    Long id;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    Date gmtCreate;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Date gmtModified;
     Long buildNumber;
     Long projectId;
     String projectName;

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.geeklib.ether.annotation.Entity;
 import com.hazelcast.nonapi.io.github.classgraph.json.Id;
 
 import lombok.Getter;
@@ -14,7 +13,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BaseEntity {
+public class BaseEntity implements java.io.Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
     @Id
     private long id;
 

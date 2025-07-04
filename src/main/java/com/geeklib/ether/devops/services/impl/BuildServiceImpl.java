@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -14,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.geeklib.ether.common.HazelcastHelper;
 import com.geeklib.ether.config.WorkspaceProperties;
 import com.geeklib.ether.devops.client.DockerClientWrapper;
+import com.geeklib.ether.devops.entity.Application;
 import com.geeklib.ether.devops.entity.BuildInfo;
 import com.geeklib.ether.devops.entity.BuildInfoS2i;
 import com.geeklib.ether.devops.handler.BuildLogHandler;
@@ -70,7 +73,7 @@ public class BuildServiceImpl implements BuildService{
     public BuildImageResultCallback build(BuildInfoS2i buildInfoS2i, String projectName, String applicationName) throws IOException {
         
 
-        Files.createDirectories(Paths.get(workspaceProperties.getPath()),null,null) ;
+        Files.createDirectories(Paths.get(workspaceProperties.getBuildPath()),null,null) ;
   
         BuildImageResultCallback buildImageResultCallback = dockerClientWrapper.build(buildInfoS2i);
 
@@ -117,5 +120,37 @@ public class BuildServiceImpl implements BuildService{
         
         // File archiveDir = new File(workspaceProperties.getFullArchivePath(projectName, applicationName, buildNumber));
         // file.transferTo(archiveDir);
+    }
+
+    @Override
+    public BuildInfo getBuildInfo(String projectName, String applicationName, long buildNumber) {
+        
+        HazelcastHelper.get(buildNumber, Application.class);
+        throw new UnsupportedOperationException("Unimplemented method 'getBuildInfo'");
+    }
+
+    @Override
+    public List<BuildInfo> listBuildInfos(String projectName, String applicationName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'listBuildInfos'");
+    }
+
+    @Override
+    public BuildInfo updateBuildInfo(String projectName, String applicationName, long buildNumber,
+            BuildInfo buildInfo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateBuildInfo'");
+    }
+
+    @Override
+    public BuildInfo patchBuildInfo(String projectName, String applicationName, long buildNumber, BuildInfo buildInfo) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'patchBuildInfo'");
+    }
+
+    @Override
+    public boolean deleteBuildInfo(String projectName, String applicationName, long buildNumber) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteBuildInfo'");
     }
 }

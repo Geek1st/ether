@@ -1,10 +1,9 @@
 package com.geeklib.ether.devops.entity;
 
-import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.geeklib.ether.annotation.Entity;
+import com.geeklib.ether.annotation.HazelcastIndex;
 import com.geeklib.ether.common.BaseEntity;
+import com.hazelcast.config.IndexType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,8 +15,11 @@ public class Application extends BaseEntity implements java.io.Serializable {
     
     private static final long serialVersionUID = 1L;
 
+    @HazelcastIndex(unique = UkNameProjectId.class, type = IndexType.HASH)
     private String name;
 
+    @HazelcastIndex(unique = UkNameProjectId.class, type = IndexType.HASH)
+    private long projectId;
 
-    private Long projectId;
+    public interface UkNameProjectId {}
 }

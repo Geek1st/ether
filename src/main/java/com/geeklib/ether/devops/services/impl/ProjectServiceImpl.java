@@ -1,19 +1,16 @@
 package com.geeklib.ether.devops.services.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.geeklib.ether.common.HazelcastHelper;
 import com.geeklib.ether.devops.entity.Project;
 import com.geeklib.ether.devops.services.ProjectService;
 import com.geeklib.ether.devops.services.RegistryService;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.map.IMap;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -25,41 +22,31 @@ public class ProjectServiceImpl implements ProjectService {
     @Resource
     HazelcastInstance hazelcastInstance;
 
-    private IMap<Long, Project> iMap;
-
-
-    @PostConstruct
-    public void init() {
-        iMap = hazelcastInstance.getMap(Project.class.getSimpleName());
-    }
-
     
-    public Project getProject(long id){
-        return iMap.get(id);
+    public Project getProject(String name){
+        return HazelcastHelper.get(name, Project.class);
     }
 
     @Override
     public List<Project> listProject() {
-        
-        Collection<Project> collection = iMap.values();
-        List<Project> projects = new ArrayList<Project>(collection);
-        return projects;
+
+        return HazelcastHelper.list(Project.class);
     }
 
     @Override
     public Project createProject(Project project) {
-        long id = hazelcastInstance.getFlakeIdGenerator(Project.class.getSimpleName()).newId();
-        project.setId(id);
-        return iMap.put(id, project);
+        // IMap<String, Project> iMap = hazelcastInstance.getMap(project.getClass().getSimpleName());
+        // return iMap.putIfAbsent(project.getName(), project);
+        return HazelcastHelper.create(project);
     }
 
     @Override
-    public void removeProject(long id) {
-        iMap.remove(id);
+    public void removeProject(String name) {
+        HazelcastHelper.delete(name, Project.class);
     }
 
     public void updateProject(Project project) {
-        iMap.put(project.getId(), project);
+        HazelcastHelper.update(project.getName(), project);
     }
     
 }

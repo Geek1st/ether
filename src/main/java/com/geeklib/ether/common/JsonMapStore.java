@@ -2,6 +2,7 @@ package com.geeklib.ether.common;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,11 +15,13 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.geeklib.ether.config.WorkspaceProperties;
+import com.geeklib.ether.utils.StringUtils;
 import com.hazelcast.map.MapStore;
 
-public class JsonMapStore<T> implements MapStore<Long, T> {
+public class JsonMapStore<K, V> implements MapStore<K, V> {
 
     protected Logger logger = LoggerFactory.getLogger(JsonMapStore.class);
 
@@ -26,12 +29,21 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
 
     WorkspaceProperties workspaceProperties;
 
-    private final Class<T> type;
+    private final Class<V> valueClass;
 
-    public JsonMapStore(Class<T> type, WorkspaceProperties workspaceProperties, ObjectMapper objectMapper) {
-        this.type = type;
+    private Class<K> keyClass;
+
+    public JsonMapStore(Class<V> valueClass, WorkspaceProperties workspaceProperties, ObjectMapper objectMapper) {
+       
+        this.valueClass = valueClass;
         this.workspaceProperties = workspaceProperties;
         this.objectMapper = objectMapper;
+
+        for (Field declaredField : valueClass.getDeclaredFields()) {
+            if (declaredField.isAnnotationPresent(JsonKey.class)) {
+                keyClass = (Class<K>) declaredField.getType();
+            }
+        }
     }
 
     /**
@@ -39,7 +51,7 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
      * 
      * @return 存储文件
      */
-    private File getStoreFile(Long key) {
+    private File getStoreFile(K key) {
         Path storeDir = getStoreDir();
         String fileName = key + ".json";
         return storeDir.resolve(fileName).toFile();
@@ -59,8 +71,8 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
      * 
      * @return 键类型的字符串表示
      */
-    protected Class<T> getValueClass() {
-        return type;
+    protected Class<V> getValueClass() {
+        return valueClass;
     };
 
     /**
@@ -69,11 +81,11 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
      * @return 键类型的字符串表示
      */
     protected String getMapName() {
-        return type.getSimpleName();
+        return StringUtils.camelToUnderline(valueClass.getSimpleName());
     }
 
     @Override
-    public T load(Long key) {
+    public V load(K key) {
 
         File file = this.getStoreFile(key);
 
@@ -90,7 +102,7 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
     }
 
     @Override
-    public void store(Long key, Object value) {
+    public void store(K key, V value) {
 
         try {
             Files.createDirectories(getStoreDir());
@@ -102,12 +114,12 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
     }
 
     @Override
-    public Map<Long, T> loadAll(Collection<Long> keys) {
-        Map<Long, T> maps = new HashMap<Long, T>();
-        for (Long key : keys) {
+    public Map<K, V> loadAll(Collection<K> keys) {
+        Map<K, V> maps = new HashMap<K, V>();
+        for (K key : keys) {
             File file = getStoreFile(key);
             if (file.exists()) {
-                T value = null;
+                V value = null;
                 try {
                     value = objectMapper.readValue(file, getValueClass());
                 } catch (IOException e) {
@@ -120,14 +132,15 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
     }
 
     @Override
-    public Iterable<Long> loadAllKeys() {
+    public Iterable<K> loadAllKeys() {
 
         //TODO 循环性能需要优化
-        List<Long> keys = null;
+        List<K> keys = null;
         try {
             keys = Files.list(getStoreDir()).map(Path::getFileName)
                     .map(name -> name.toString().substring(0, name.toString().lastIndexOf(".")))
-                    .map(Long::valueOf).collect(Collectors.toList());
+                    .map(name -> keyClass.cast(name) )
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -135,14 +148,14 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
     }
 
     @Override
-    public void storeAll(Map<Long, T> map) {
+    public void storeAll(Map<K, V> map) {
         map.forEach((key, value) -> {
             store(key, value);
         });
     }
 
     @Override
-    public void delete(Long key) {
+    public void delete(K key) {
         File file = getStoreFile(key);
         try {
             Files.deleteIfExists(file.toPath());
@@ -152,7 +165,7 @@ public class JsonMapStore<T> implements MapStore<Long, T> {
     }
 
     @Override
-    public void deleteAll(Collection<Long> keys) {
+    public void deleteAll(Collection<K> keys) {
         keys.forEach(key -> {
             try {
                 Files.deleteIfExists(getStoreFile(key).toPath());

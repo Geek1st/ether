@@ -2,8 +2,8 @@ package com.geeklib.ether.devops.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
-import org.apache.groovy.json.internal.IO;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -25,9 +25,13 @@ public interface BuildService {
 
     public void archive(MultipartFile file, String projectName, String applicationName, Long buildNumber) throws IOException, IllegalStateException;
 
-    // public void build(Build build);
+    public BuildInfo getBuildInfo(String projectName, String applicationName, long buildNumber);
 
-    // public List<Build> listBuild();
+    public List<BuildInfo> listBuildInfos(String projectName, String applicationName);
 
-    // public Build getBuild();
+    public BuildInfo updateBuildInfo(String projectName, String applicationName, long buildNumber, BuildInfo buildInfo);
+
+    public BuildInfo patchBuildInfo(String projectName, String applicationName, long buildNumber, BuildInfo buildInfo);
+
+    public boolean deleteBuildInfo(String projectName, String applicationName, long buildNumber);
 }

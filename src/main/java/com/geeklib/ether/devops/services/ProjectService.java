@@ -10,9 +10,9 @@ public interface ProjectService extends BaseService{
 
     Project createProject(Project project);
 
-    Project getProject(long id);
+    Project getProject(String name);
 
-    void removeProject(long id);
+    void removeProject(String name);
 
     void updateProject(Project project);
 

@@ -3,8 +3,9 @@ package com.geeklib.ether.devops.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,27 +39,25 @@ public class ProjectController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Project> createProject(@RequestBody Project project){
+    public Project createProject(@RequestBody @Validated(Project.CreateGroup.class) Project project){
 
-        ;
-        return ResponseEntity.ok().body(projectService.createProject(project));
+        return projectService.createProject(project);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Project> getProject(@PathVariable long id){
-        return ResponseEntity.ok(projectService.getProject(id));
+
+    @GetMapping("/{name}")
+    public Project getProject(@PathVariable String name){
+        return projectService.getProject(name);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProject(@PathVariable long id){
-        projectService.removeProject(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/{name}")
+    public void deleteProject(@PathVariable String name){
+
+        projectService.removeProject(name);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateProject(@PathVariable long id, Project project){
+    @PutMapping("/{name}")
+    public void updateProject(@PathVariable String name, Project project){
         projectService.updateProject(project);
-
-        return ResponseEntity.ok("");
     } 
 }
