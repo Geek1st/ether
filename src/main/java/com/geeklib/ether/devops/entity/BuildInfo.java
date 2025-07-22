@@ -3,8 +3,8 @@ package com.geeklib.ether.devops.entity;
 
 import java.util.Date;
 
-import com.geeklib.ether.annotation.Entity;
 import com.geeklib.ether.common.BaseEntity;
+import com.geeklib.ether.common.annotation.Entity;
 
 import lombok.Getter;
 import lombok.Setter;

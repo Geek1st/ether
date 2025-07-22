@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.geeklib.ether.common.HazelcastHelper;
-import com.geeklib.ether.config.WorkspaceProperties;
+import com.geeklib.ether.common.config.WorkspaceProperties;
 import com.geeklib.ether.devops.client.DockerClientWrapper;
 import com.geeklib.ether.devops.entity.Application;
 import com.geeklib.ether.devops.entity.BuildInfo;

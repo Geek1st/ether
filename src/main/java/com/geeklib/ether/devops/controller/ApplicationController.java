@@ -4,19 +4,17 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.geeklib.ether.devops.entity.Application;
 import com.geeklib.ether.devops.services.ApplicationService;
-import com.hazelcast.spi.impl.operationservice.impl.responses.Response;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -29,24 +27,29 @@ public class ApplicationController {
 
     Application application;
 
-    @GetMapping("")
-    public ResponseEntity<List<Application>> listApplications() {
-        return ResponseEntity.ok(applicationService.listApplications());
+    @GetMapping("{name}")
+    public Application getApplication(@PathVariable String name) {
+        return applicationService.getApplication(name);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Application> getApplication(@PathVariable long id) {
-        return ResponseEntity.ok(applicationService.getApplication(id));
+    @GetMapping("")
+    public List<Application> listApplications() {
+        return applicationService.listApplications();
     }
 
     @PostMapping("")
-    public ResponseEntity<Application> createApplication(@RequestBody Application application) {
-        return ResponseEntity.ok(applicationService.createApplication(application));
+    public Application createApplication(@RequestBody Application application) {
+        return applicationService.createApplication(application);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<Application> updateApplication(@PathVariable long id, @RequestBody Application application) {
-        return ResponseEntity.ok(applicationService.createApplication(application));
+    @DeleteMapping("{name}")
+    public void deleteApplication(@PathVariable String name) {
+        applicationService.deleteApplication(name);
+    }
+
+    @PutMapping("{name}")
+    public void updateApplication(@PathVariable String name, @RequestBody Application application) {
+        applicationService.updateApplication(name, application);
     }
     
 }

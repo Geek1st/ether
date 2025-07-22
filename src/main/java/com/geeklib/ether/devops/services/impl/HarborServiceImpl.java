@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.geeklib.ether.config.RegistryConfig;
+import com.geeklib.ether.common.config.RegistryConfig;
 import com.geeklib.ether.devops.services.RegistryService;
 // import com.geeklib.ether.exception.HttpServiceException;
 // import com.geeklib.registry.api.ArtifactApi;

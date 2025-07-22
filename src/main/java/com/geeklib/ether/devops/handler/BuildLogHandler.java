@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.geeklib.ether.config.WorkspaceProperties;
+import com.geeklib.ether.common.config.WorkspaceProperties;
 import com.geeklib.ether.devops.entity.BuildInfo;
 import com.hazelcast.client.impl.protocol.codec.ScheduledExecutorSubmitToMemberCodec;
 import com.hazelcast.core.HazelcastInstance;

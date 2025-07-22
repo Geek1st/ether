@@ -2,11 +2,15 @@ package com.geeklib.ether.devops.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import com.geeklib.ether.devops.entity.Project;
+import com.geeklib.ether.common.QueryParams;
 
 public interface ProjectService extends BaseService{
 
     List<Project> listProject();
+    List<Project> listProject(QueryParams queryParams, Pageable pageable);
 
     Project createProject(Project project);
 
@@ -15,5 +19,7 @@ public interface ProjectService extends BaseService{
     void removeProject(String name);
 
     void updateProject(Project project);
+
+    void patchProject(Project project);
 
 }

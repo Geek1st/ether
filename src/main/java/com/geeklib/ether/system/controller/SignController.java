@@ -1,7 +1,5 @@
 package com.geeklib.ether.system.controller;
 
-import javax.annotation.Resource;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -12,10 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.geeklib.ether.common.utils.JwtUtils;
 import com.geeklib.ether.system.entity.User;
 import com.geeklib.ether.system.service.JwtBlacklistService;
-import com.geeklib.ether.system.service.UserService;
-import com.geeklib.ether.utils.JwtUtils;
 
 @RestController
 public class SignController {

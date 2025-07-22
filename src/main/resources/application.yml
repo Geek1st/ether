@@ -1,3 +1,16 @@
 spring:
     profiles:
         active: dev
+    data:
+        keyvalue:
+            hazelcast:
+                enabled: true
+                instance-name: ether
+                config:
+                    map:
+                        default:
+                            backup-count: 1
+                            eviction:
+                                max-size: 10000
+                                size-type: CARDINALITY
+                                eviction-policy: LRU

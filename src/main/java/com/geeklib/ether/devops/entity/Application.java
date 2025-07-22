@@ -1,8 +1,8 @@
 package com.geeklib.ether.devops.entity;
 
-import com.geeklib.ether.annotation.Entity;
-import com.geeklib.ether.annotation.HazelcastIndex;
 import com.geeklib.ether.common.BaseEntity;
+import com.geeklib.ether.common.annotation.Entity;
+import com.geeklib.ether.common.annotation.HazelcastIndex;
 import com.hazelcast.config.IndexType;
 
 import lombok.Getter;

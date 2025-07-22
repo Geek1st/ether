@@ -3,6 +3,7 @@ package com.geeklib.ether.common;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -17,8 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonKey;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.geeklib.ether.config.WorkspaceProperties;
-import com.geeklib.ether.utils.StringUtils;
+import com.geeklib.ether.common.config.WorkspaceProperties;
+import com.geeklib.ether.common.utils.StringUtils;
 import com.hazelcast.map.MapStore;
 
 public class JsonMapStore<K, V> implements MapStore<K, V> {
@@ -31,19 +33,11 @@ public class JsonMapStore<K, V> implements MapStore<K, V> {
 
     private final Class<V> valueClass;
 
-    private Class<K> keyClass;
-
     public JsonMapStore(Class<V> valueClass, WorkspaceProperties workspaceProperties, ObjectMapper objectMapper) {
-       
+
         this.valueClass = valueClass;
         this.workspaceProperties = workspaceProperties;
         this.objectMapper = objectMapper;
-
-        for (Field declaredField : valueClass.getDeclaredFields()) {
-            if (declaredField.isAnnotationPresent(JsonKey.class)) {
-                keyClass = (Class<K>) declaredField.getType();
-            }
-        }
     }
 
     /**
@@ -89,7 +83,7 @@ public class JsonMapStore<K, V> implements MapStore<K, V> {
 
         File file = this.getStoreFile(key);
 
-        if(!file.exists()) {
+        if (!file.exists()) {
             return null;
         }
 
@@ -133,16 +127,21 @@ public class JsonMapStore<K, V> implements MapStore<K, V> {
 
     @Override
     public Iterable<K> loadAllKeys() {
+        List<K> keys = new ArrayList<K>();
 
-        //TODO 循环性能需要优化
-        List<K> keys = null;
-        try {
-            keys = Files.list(getStoreDir()).map(Path::getFileName)
-                    .map(name -> name.toString().substring(0, name.toString().lastIndexOf(".")))
-                    .map(name -> keyClass.cast(name) )
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
+        Path storeDir = getStoreDir();
+
+        File[] files = storeDir.toFile().listFiles();
+        if (files == null) {
+            return keys;
+        }
+
+        for (File file : files) {
+            if (file.isFile()) {
+                String fileName = file.getName();
+                String key = fileName.substring(0, fileName.lastIndexOf("."));
+                keys.add((K) key);
+            }
         }
         return keys;
     }
@@ -172,7 +171,8 @@ public class JsonMapStore<K, V> implements MapStore<K, V> {
             } catch (IOException e) {
                 logger.error("持久化文件删除失败", getStoreFile(key), e);
             }
-        });;
+        });
+        ;
     }
 
 }

@@ -2,7 +2,6 @@ package com.geeklib.ether.devops.services.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -30,51 +29,34 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Application getApplication(long id) {
-        IMap<Long, Application> imap = hazelcastInstance.getMap(Application.class.getSimpleName());
-        Application application = imap.get(id);
+    public Application getApplication(String name) {
+        IMap<String, Application> imap = hazelcastInstance.getMap(Application.class.getSimpleName());
+        Application application = imap.get(name);
         return application;
     }
 
     @Override
     public Application createApplication(Application application) {
-        long id = hazelcastInstance.getFlakeIdGenerator(Application.class.getSimpleName()).newId();
-        application.setId(id);
         hazelcastInstance.getMap(Application.class.getSimpleName())
-                .put(id, application);
+                .put(application.getName(), application);
         return application;
     }
 
     @Override
-    public boolean updateApplication(long id, Application application) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateApplication'");
+    public void updateApplication(String name, Application application) {
+        hazelcastInstance.getMap(Application.class.getSimpleName())
+                .put(application.getName(), application);
     }
 
     @Override
-    public boolean patchApplication(long id, Application application) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'patchApplication'");
+    public void patchApplication(String name, Application application) {
+        hazelcastInstance.getMap(Application.class.getSimpleName())
+                .put(application.getName(), application);
     }
 
     @Override
-    public boolean deleteApplication(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteApplication'");
+    public void deleteApplication(String name) {
+        hazelcastInstance.getMap(Application.class.getSimpleName())
+                .remove(name);
     }
-
-    @Override
-    public boolean deleteApplication(Application application) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteApplication'");
-    }
-
-    @Override
-    public boolean deleteApplications(List<Long> ids) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteApplications'");
-    }
-
-    
-    
 }

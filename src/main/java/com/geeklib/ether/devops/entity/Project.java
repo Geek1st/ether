@@ -4,11 +4,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.fasterxml.jackson.annotation.JsonKey;
-import com.geeklib.ether.annotation.Entity;
-import com.geeklib.ether.annotation.HazelcastIndex;
 import com.geeklib.ether.common.BaseEntity;
-import com.hazelcast.config.IndexType;
+import com.geeklib.ether.common.annotation.Entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -23,13 +20,6 @@ public class Project extends BaseEntity {
 
     public interface UpdateGroup {
     }
-
-    @Length(max = 50)
-    @NotBlank(groups = { CreateGroup.class, UpdateGroup.class }, message = "项目名称不能为空")
-    @ApiModelProperty(value = "项目名称", required = true)
-    @HazelcastIndex(type = IndexType.HASH)
-    @JsonKey
-    private String name;
 
     @Length(max = 2000)
     @ApiModelProperty(value = "项目描述")

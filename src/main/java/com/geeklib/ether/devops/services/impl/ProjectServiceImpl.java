@@ -4,13 +4,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.geeklib.ether.common.HazelcastHelper;
+import com.geeklib.ether.common.QueryParams;
 import com.geeklib.ether.devops.entity.Project;
+import com.geeklib.ether.devops.repository.ProjectRepository;
 import com.geeklib.ether.devops.services.ProjectService;
 import com.geeklib.ether.devops.services.RegistryService;
-import com.hazelcast.core.HazelcastInstance;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -20,24 +22,26 @@ public class ProjectServiceImpl implements ProjectService {
     RegistryService registryservice;
 
     @Resource
-    HazelcastInstance hazelcastInstance;
+    ProjectRepository projectRepository;
 
-    
-    public Project getProject(String name){
+    @Override
+    public Project getProject(String name) {
         return HazelcastHelper.get(name, Project.class);
     }
 
     @Override
     public List<Project> listProject() {
-
         return HazelcastHelper.list(Project.class);
     }
 
     @Override
+    public List<Project> listProject(QueryParams queryParams, Pageable pageable) {
+        return HazelcastHelper.list(Project.class, queryParams, pageable);
+    }
+
+    @Override
     public Project createProject(Project project) {
-        // IMap<String, Project> iMap = hazelcastInstance.getMap(project.getClass().getSimpleName());
-        // return iMap.putIfAbsent(project.getName(), project);
-        return HazelcastHelper.create(project);
+        return HazelcastHelper.create(project.getName(), project); 
     }
 
     @Override
@@ -47,6 +51,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     public void updateProject(Project project) {
         HazelcastHelper.update(project.getName(), project);
+    }
+
+    public void patchProject(Project project) {
+        HazelcastHelper.patch(project.getName(), project);
     }
     
 }
