@@ -2,20 +2,22 @@ package com.geeklib.ether.common.exception;
 
 import org.springframework.http.HttpStatus;
 
+import lombok.Getter;
+
 /**
  * 409
  */
-public class ResourceConflictException extends HttpRequestException {
+@Getter
+public class ResourceConflictException extends ApiException {
+
+    private String title = "资源冲突";
+    private HttpStatus status = HttpStatus.CONFLICT;
+
+    public ResourceConflictException(String message) {
+        super(message);
+    }
 
     public ResourceConflictException(String message, String... args) {
-        super(HttpStatus.CONFLICT, message, args);
-    }
-    
-    public ResourceConflictException() {
-        super(HttpStatus.CONFLICT, "资源冲突");
-    }
-
-    public ResourceConflictException(String key) {
-        super(HttpStatus.CONFLICT, "资源{}已存在，无法进行操作", key);
+        super(message, args);
     }
 }

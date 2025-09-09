@@ -1,22 +1,20 @@
 package com.geeklib.ether.system.entity;
 
-import java.util.Date;
+import java.util.Set;
+
+import com.geeklib.ether.common.BaseEntity;
+import com.geeklib.ether.common.annotation.Entity;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class User {
-
-    private Long id;
-
-    private Date gmtCreate;
-
-    private Date gmtModified;
-
-    private String username;
+@Entity
+public class User extends BaseEntity{
 
     private String password;
+
+    private Set<Role> roles;
 
 }

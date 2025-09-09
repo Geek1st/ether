@@ -1,8 +1,9 @@
 package com.geeklib.ether.common.interceptor;
 
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,9 @@
 package com.geeklib.ether.system.controller;
 
+import javax.annotation.Resource;
+
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.geeklib.ether.common.HazelcastTokenHelper;
 import com.geeklib.ether.common.utils.JwtUtils;
-import com.geeklib.ether.system.entity.User;
+import com.geeklib.ether.system.entity.LoginParam;
+import com.geeklib.ether.system.security.TokenFactory;
 import com.geeklib.ether.system.service.JwtBlacklistService;
+import com.hazelcast.core.HazelcastInstance;
 
 @RestController
 public class SignController {
@@ -20,31 +24,30 @@ public class SignController {
     // @Resource
     // UserService userService;
 
+    @Resource
+    HazelcastInstance hazelcastInstance;
+
     // @Resource
     JwtBlacklistService jwtBlacklistService;
 
     @PostMapping("login")
-    public ResponseEntity<Object> login(@RequestBody User user) {
-
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+    public ResponseEntity<Object> login(@RequestBody LoginParam loginParam) {
+        AuthenticationToken token = TokenFactory.create(loginParam);
         Subject subject = SecurityUtils.getSubject();
 
-        try {
-            subject.login(token);
-            return ResponseEntity.ok(JwtUtils.generateToken(user.getUsername()));
-        } catch (AuthenticationException e) {
-            
-            return ResponseEntity.internalServerError().body("用户名或密码错");         
-        }
+        subject.login(token);
+        String jwtToken = JwtUtils.generateToken(subject.getPrincipal().toString());
+        HazelcastTokenHelper.addToken(jwtToken);
+        return ResponseEntity.ok(jwtToken);
 
     }
 
     @PostMapping("logout")
     public ResponseEntity<Object> logout(@RequestHeader("authorization") String authorizationHeader) {
         String token = authorizationHeader.isEmpty() ? "" : authorizationHeader.substring(7);
-
-        jwtBlacklistService.addTokenToBlacklist(token);
-        // TODO 前端删除token后，后端刷新令牌或者加入令牌黑名单
+        SecurityUtils.getSubject().logout();
+        String username = JwtUtils.getUsername(token);
+        hazelcastInstance.getMap("token").remove(username);
         return ResponseEntity.ok(null);
     }
 

@@ -1,9 +1,10 @@
 package com.geeklib.ether.common.resolver;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,7 +17,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.geeklib.ether.common.QueryParams;
 import com.geeklib.ether.common.QueryParams.Operator;
-import org.apache.commons.lang3.StringUtils;
 
 @Component
 public class RestQueryParamsResolver implements HandlerMethodArgumentResolver{
@@ -43,21 +43,16 @@ public class RestQueryParamsResolver implements HandlerMethodArgumentResolver{
             }
             String[] values = parameterMap.get(paramName);
             String value = values[0];
+
+            // try {
+            //     value = LocalDateTime.parse(value.toString());
+            // } catch (Exception e) {
+                
+            // }
+            
+            
             String key = paramName; // 默认使用原始参数名
             Operator operator = Operator.EQ; // 默认使用等于
-    
-
-            
-            // 检查是否以枚举值结尾
-            for (QueryParams.Operator op : QueryParams.Operator.values()) {
-                if (paramName.endsWith("_" + op.name().toLowerCase())) {
-                    // 使用 lastIndexOf 获取下划线位置，避免多次调用 substring
-                    int underscoreIndex = paramName.lastIndexOf('_');
-                    key = paramName.substring(0, underscoreIndex);
-                    operator = op;
-                    break;
-                }
-            }
 
             // 检查是否包含冒号分隔符
             int colonIndex = paramName.indexOf(':');
@@ -80,4 +75,5 @@ public class RestQueryParamsResolver implements HandlerMethodArgumentResolver{
         }
         return queryParams;
     }
+
 }

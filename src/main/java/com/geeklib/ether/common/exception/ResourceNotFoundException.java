@@ -2,20 +2,22 @@ package com.geeklib.ether.common.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** 
- * 404 
+import lombok.Getter;
+
+/**
+ * 404
  */
-public class ResourceNotFoundException extends HttpRequestException {
+@Getter
+public class ResourceNotFoundException extends ApiException {
+
+    private String title = "资源不存在";
+    private HttpStatus status = HttpStatus.NOT_FOUND;
+
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
 
     public ResourceNotFoundException(String message, String... args) {
-        super(HttpStatus.NOT_FOUND, message, args);
-    }
-
-    public ResourceNotFoundException(){
-        super(HttpStatus.NOT_FOUND, "资源未找到");
-    }
-
-    public ResourceNotFoundException(String key) {
-        super(HttpStatus.NOT_FOUND, "资源{}不存在", key);
+        super(message, args);
     }
 }

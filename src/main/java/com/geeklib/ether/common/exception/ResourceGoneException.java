@@ -5,17 +5,13 @@ import org.springframework.http.HttpStatus;
 /**
  * 410 Gone
  */
-public class ResourceGoneException extends HttpRequestException {
+public class ResourceGoneException extends ApiException {
 
-    public ResourceGoneException(String message, String... args) {
-        super(HttpStatus.GONE, message, args);
-    }
+    private String title = "资源永久失效";
+    private String type = "http://www.baidu.com";
+    private HttpStatus status = HttpStatus.GONE;
 
-    public ResourceGoneException() {
-        super(HttpStatus.GONE, "资源已被删除或不存在");
-    }
-
-    public ResourceGoneException(String key) {
-        super(HttpStatus.GONE, "资源{}已被删除或不存在，无法进行操作", key);
+    public ResourceGoneException(String message) {
+        super(message);
     }
 }

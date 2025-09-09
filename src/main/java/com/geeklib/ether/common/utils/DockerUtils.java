@@ -1,36 +1,6 @@
 package com.geeklib.ether.common.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import com.geeklib.ether.devops.entity.BuildInfo;
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.BuildImageResultCallback;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.command.InspectImageResponse;
-import com.github.dockerjava.api.model.BuildResponseItem;
-import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.api.model.ResponseItem.ProgressDetail;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.transport.DockerHttpClient;
 
 @Component
 public class DockerUtils {

@@ -1,6 +1,7 @@
 package com.geeklib.ether.common.realm;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -32,10 +33,16 @@ public class UsernamePasswordRealm extends AuthorizingRealm{
     
     @Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		String username = ((User)principals.getPrimaryPrincipal()).getUsername();
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		
-		authorizationInfo.addRoles(new HashSet<>());
+        Set<String> permission = new HashSet<>();
+        permission.add("permission");
+        permission.add("project:get");
+        permission.add("project:list");
+        permission.add("project:create");
+        permission.add("project:update");
+        permission.add("project:delete");
+        authorizationInfo.setStringPermissions(permission);
 		
 		return authorizationInfo;
 	}
@@ -50,7 +57,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm{
 		String username = usernamepasswordToken.getUsername();
 		String password = String.valueOf(usernamepasswordToken.getPassword());
 
-		User user = userService.getUserByUsernameAndPassword(username, password);
+		User user = userService.getUser(username);
         
 		if(null == user){
 			throw new AuthenticationException("用户名或密码错误");

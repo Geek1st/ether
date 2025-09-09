@@ -2,44 +2,51 @@ package com.geeklib.ether.system.service.impl;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.geeklib.ether.common.HazelcastPersistenceHelper;
+import com.geeklib.ether.common.QueryParams;
 import com.geeklib.ether.system.entity.User;
-import com.geeklib.ether.system.mapper.UserMapper;
 import com.geeklib.ether.system.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService{
 
-    @Resource
-    UserMapper userMapper;
-
     @Override
-    public User getUserByUsername(String username) {
-        return null;
+    public User getUser(String name) {
+        return HazelcastPersistenceHelper.get(name, User.class);
     }
 
     @Override
-    public User getUserByUsernameAndPassword(String username, String password) {
-        return null;
+    public User getUserByNameAndPassword(String name, String password) {
+        return HazelcastPersistenceHelper.get(name, User.class);
     }
 
     @Override
-    public User getUserById(Long id) {
-        return null;
+    public List<User> listUser(QueryParams queryParams, Pageable pageable) {
+        return HazelcastPersistenceHelper.list(User.class, queryParams, pageable);
     }
 
     @Override
-    public List<User> listUser(User user) {
-        return null;
+    public void createUser(User user) {
+        HazelcastPersistenceHelper.create(user.getName(), user);
     }
 
     @Override
-    public boolean validateUser(String username, String password) {
-        
-        return getUserByUsernameAndPassword(username, password) != null;
+    public void updateUser(User user) {
+        HazelcastPersistenceHelper.update(user.getName(), user);
     }
+
+    @Override
+    public void patchUser(User user) {
+        HazelcastPersistenceHelper.patch(user.getName(), user);
+    }
+
+    @Override
+    public void deleteUser(String name) {
+        HazelcastPersistenceHelper.delete(name, User.class);
+    }
+
     
 }

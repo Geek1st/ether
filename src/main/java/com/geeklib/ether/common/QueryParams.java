@@ -18,7 +18,7 @@ public class QueryParams extends ArrayList<QueryParams.QueryParam> {
 
     @Getter
     @Setter
-    public class QueryParam {
+    public class QueryParam{
         private String key;
         private Operator operator;
         private String value;

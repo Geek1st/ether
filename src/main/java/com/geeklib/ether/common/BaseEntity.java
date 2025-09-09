@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonKey;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BaseEntity implements java.io.Serializable {
+public class BaseEntity implements java.io.Serializable, Comparable<BaseEntity> {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,5 +36,11 @@ public class BaseEntity implements java.io.Serializable {
     @Pattern(regexp = "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$", 
              message = "Name必须以字母或数字开头和结尾 小写字母（a-z）数字（0-9）连字符（-）")
     @Id
+    @JsonKey
     private String name;
+
+    @Override
+    public int compareTo(BaseEntity o) {
+        return this.name.compareTo(o.name);
+    }
 }
